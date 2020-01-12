@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.shop_fragment.*
+import vlados.dudos.pixelseller.Case.openFragment
 
 class ShopFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,11 +24,13 @@ class ShopFragment : Fragment() {
 
 
     fun replaceFragment(fmt: Fragment) {
-        fragmentManager!!.beginTransaction().replace(R.id.fragmet_holder, fmt).addToBackStack(null).commit()
+        fragmentManager!!.beginTransaction().replace(R.id.fragmet_holder, fmt).addToBackStack(null)
+            .commit()
     }
 
     private fun clickItem(shopModel: ShopModel) {
         replaceFragment(PixelFragment())
+        openFragment = "PixelFragment opened"
     }
 
 
