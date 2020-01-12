@@ -28,8 +28,8 @@
             android:id="@+id/navigation_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@color/white"
+            android:visibility="visible"
             app:itemIconTint="@color/toolbar_color"
             app:itemTextColor="@color/grey"
             app:menu="@menu/bottom_navigation_menu" />
