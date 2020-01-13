@@ -6,5 +6,4 @@ object Case {
 
     var openFragment = ""
 
-
 }

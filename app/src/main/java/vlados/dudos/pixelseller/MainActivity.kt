@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.settings -> {
                     showSettingsFragment()
                 }
+                R.id.heart_img -> {
+                    showFavoriteFragment()
+                }
+
             }
             true
         }
@@ -60,5 +64,12 @@ class MainActivity : AppCompatActivity() {
         navigation_bar.visibility = View.VISIBLE
     }
 
+    fun showFavoriteFragment() {
+        if (openFragment != "FavoriteFragment opened") {
+            replaceFragment(FavoriteFragment())
+        }
+        openFragment = "FavoriteFragment opened"
+        navigation_bar.visibility = View.VISIBLE
+    }
 
 }

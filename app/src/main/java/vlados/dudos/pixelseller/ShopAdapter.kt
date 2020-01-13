@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.shop_fragment.view.*
 import kotlinx.android.synthetic.main.shop_view.view.*
 
 class ShopAdapter(val list: List<ShopModel>, val clickItem: (ShopModel) -> Unit) :
@@ -14,8 +13,7 @@ class ShopAdapter(val list: List<ShopModel>, val clickItem: (ShopModel) -> Unit)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopView {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shop_view, parent, false)
-        val shopView = ShopView(view)
-        return shopView
+        return ShopView(view)
     }
 
     override fun getItemCount(): Int {
