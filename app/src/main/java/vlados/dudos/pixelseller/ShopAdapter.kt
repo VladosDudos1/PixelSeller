@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.shop_view.view.*
 
-class ShopAdapter(val list: List<ShopModel>, val clickItem: (ShopModel) -> Unit) :
+class ShopAdapter(val list: List<ShopModel>, val interfaceObject: (ShopModel) -> Unit) :
     RecyclerView.Adapter<ShopAdapter.ShopView>() {
 
 
@@ -29,7 +29,7 @@ class ShopAdapter(val list: List<ShopModel>, val clickItem: (ShopModel) -> Unit)
 
         holder.itemView.shop_txt.text = shop.text
         holder.itemView.setOnClickListener {
-            clickItem(shop)
+            interfaceObject(shop)
         }
     }
 

@@ -48,12 +48,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showShopFragment() {
-        if (openFragment != "ShopFrahment opened") {
+        if (openFragment != "ShopFragment opened") {
             replaceFragment(ShopFragment())
         }
-        openFragment = "ShopFrahment opened"
-        navigation_bar.visibility = View.VISIBLE
-
+        openFragment = "ShopFragment opened"
     }
 
     fun showSettingsFragment() {
@@ -61,7 +59,6 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(SettingsFragment())
         }
         openFragment = "SettingsFragment opened"
-        navigation_bar.visibility = View.VISIBLE
     }
 
     fun showFavoriteFragment() {
@@ -69,7 +66,6 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(FavoriteFragment())
         }
         openFragment = "FavoriteFragment opened"
-        navigation_bar.visibility = View.VISIBLE
     }
 
 }
