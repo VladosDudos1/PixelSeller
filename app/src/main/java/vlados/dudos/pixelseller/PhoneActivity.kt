@@ -5,23 +5,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_phone.*
+import vlados.dudos.pixelseller.Case.sharedPreferences
 
 class PhoneActivity : AppCompatActivity() {
 
     var shopModel: ShopModel? = null
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-
-//        shopModel?.let{
-//            if(it.)
-//        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +39,32 @@ class PhoneActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val MODEL_KEY = "phone_model"
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        MenuInflater(baseContext).inflate(R.menu.toolbar_menu, menu)
+        menu?.let {
+            it.getItem(0).setOnMenuItemClickListener {
+                shopModel?.apply {
+                    val name = "fav${this.id}"
+                    val result = sharedPreferences.value.getBoolean(name, false)
 
-        fun newIntent(activity: Activity, model: ShopModel) =
-            Intent(activity, PhoneActivity::class.java).apply {
+                    sharedPreferences.value.edit().putBoolean(name, !result).apply()
+                    Toast.makeText(this@PhoneActivity, (!result).toString(), Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                true
+            }
+        }
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    companion object {
+        private const val MODEL_KEY = "photo_model"
+
+        fun newIntent(ac: Activity, model: ShopModel) =
+            Intent(ac, PhoneActivity::class.java).apply {
                 putExtra(MODEL_KEY, model)
             }
     }
+
 }

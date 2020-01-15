@@ -1,5 +1,6 @@
 package vlados.dudos.pixelseller
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,7 +11,7 @@ import vlados.dudos.pixelseller.Case.openFragment
 
 class MainActivity : AppCompatActivity() {
 
-
+    private val fragmetShop = ShopFragment()
     private val manager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +43,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        openFragment = ""
+    }
+
+    override fun onBackPressed() {
+        if (manager.backStackEntryCount > 0) {
+            val count = manager.backStackEntryCount
+            for (i in 0 until count)
+                manager.popBackStack()
+            manager.beginTransaction().replace(
+                R.id.fragmet_holder, fragmetShop
+            ).commit()
+        } else {
+            super.onBackPressed()
+        }
+
+    }
 
     fun replaceFragment(fmt: Fragment) {
-        manager.beginTransaction().replace(R.id.fragmet_holder, fmt).addToBackStack(null).commit()
+        if (openFragment == "") {
+            manager.beginTransaction().replace(R.id.fragmet_holder, fmt).commit()
+        } else {
+            manager.beginTransaction().replace(R.id.fragmet_holder, fmt).addToBackStack(null)
+                .commit()
+        }
     }
 
     fun showShopFragment() {
@@ -67,5 +91,5 @@ class MainActivity : AppCompatActivity() {
         }
         openFragment = "FavoriteFragment opened"
     }
-
 }
+

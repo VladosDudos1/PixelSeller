@@ -1,6 +1,7 @@
 package vlados.dudos.pixelseller
 
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -22,11 +24,13 @@ import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import kotlinx.android.synthetic.main.settings_fragment.*
 import java.lang.Exception
 import android.os.Environment.getExternalStorageDirectory
+import androidx.core.app.ActivityCompat.getExternalFilesDirs
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-
 
 class SettingsFragment : Fragment() {
 
@@ -42,15 +46,51 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_DENIED ||
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            == PackageManager.PERMISSION_DENIED
+        ) {
+
+
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), 31
+            )
+        }
         user_photo.setOnClickListener {
             selectImg(view)
         }
 
-        val path = shared.value.getString("photo_path", "")
-        if (!path.isNullOrEmpty())
-            user_photo.setImageURI(path.toUri())
-    }
+        try {
+            val path = shared.value.getString("photo_path", "")
+            if (!path.isNullOrEmpty())
+                user_photo.setImageURI(path.toUri())
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
 
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            31 -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED))
+                return
+            }
+        }
+    }
     fun selectImg(view: View) {
         MaterialDialog(requireActivity())
             .title(text = "Choose from ")
@@ -75,7 +115,6 @@ class SettingsFragment : Fragment() {
 
         }
     }
-
     private var bitmap: Bitmap? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -83,8 +122,9 @@ class SettingsFragment : Fragment() {
         if (resultCode != Activity.RESULT_OK) return
         if (data == null) return
         if (requestCode == 0) {
-            val stream = requireActivity().contentResolver.openInputStream(data.data!!)
-            bitmap = BitmapFactory.decodeStream(stream)
+            data.data?.let {
+                bitmap = getPhotoFromUri(requireContext(), it)
+            }
         } else if (requestCode == 1) {
             bitmap = data.extras!!.get("data") as Bitmap
         }
@@ -93,31 +133,18 @@ class SettingsFragment : Fragment() {
         if (bitmap != null) {
             val path = getExternalStorageDirectory().toString()
             var fOut: OutputStream?
-            val counter = 0
-            val file = File(
-                path,
-                "FitnessGirl$counter.jpg"
-            )
+            val file = File(path, "Yuuechka.jpg")
             fOut = FileOutputStream(file)
-
-            val pictureBitmap = bitmap!!
-            pictureBitmap.compress(
-                Bitmap.CompressFormat.JPEG,
-                85,
-                fOut
-            )
+            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 85, fOut)
             fOut.flush()
             fOut.close()
-
-            val editor = shared.value.edit()
-            editor.putString("photo_path", file.absolutePath)
-            editor.apply()
-
-
+            shared.value.edit().putString("photo_path",file.absolutePath).apply()
         }
 
     }
 
+    companion object {
+        private const val PHOTO_KEY = "photo_path"
+    }
 
 }
-

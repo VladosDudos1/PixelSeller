@@ -15,10 +15,11 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            app:titleTextColor="@color/white"
             android:layout_width="match_parent"
+            app:menu="@menu/toolbar_menu"
             android:layout_height="?actionBarSize"
-            android:background="@color/toolbar_color" />
+            android:background="@color/toolbar_color"
+            app:titleTextColor="@color/white"/>
 
 
         <ImageView

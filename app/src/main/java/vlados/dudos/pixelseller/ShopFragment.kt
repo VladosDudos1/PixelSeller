@@ -2,53 +2,58 @@ package vlados.dudos.pixelseller
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.android.synthetic.main.shop_fragment.*
-import vlados.dudos.pixelseller.Case.openFragment
-import java.lang.Exception
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_phone.view.*
+import kotlinx.android.synthetic.main.shop_view.view.*
+import vlados.dudos.pixelseller.Case.listF
 
 class ShopFragment : Fragment() {
-
-    private var listHolder = mutableListOf<ShopModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.shop_fragment, container, false)
+
+        val asd = inflater.inflate(R.layout.favorite_fragment, container, false)
+        val rv2 = asd.findViewById(R.id.rv) as RecyclerView
+
+
+        rv2.layoutManager = GridLayoutManager(activity, 2)
+        rv2.adapter = ShopAdapterF(listF)
+        return asd
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        listHolder = mutableListOf(
-            ShopModel(0, R.drawable.pixel, "Pixel 4", getString(R.string.pixel4)),
-            ShopModel(1, R.drawable.iphoneleven, "Iphone 11 Pro", getString(R.string.Iphone11)),
-            ShopModel(2, R.drawable.iphonxsmax, "Iphone XS max", getString(R.string.iphoneXS)),
-            ShopModel(3, R.drawable.honordvadtsat, "Honor 20", getString(R.string.Honor20)),
-            ShopModel(4, R.drawable.honorten, "Honor 10", getString(R.string.Honor10)),
-            ShopModel(5, R.drawable.xiaominote, "Xiaomi Note 8", getString(R.string.Xiaomi8)),
-            ShopModel(6, R.drawable.xiaomimi, "Xiaomi Mi 10", getString(R.string.XiaomiMi)),
-            ShopModel(7, R.drawable.pixelnew, "Pixel 3XL", getString(R.string.Pixel3))
-        )
 
-        val lb = { s:ShopModel->
-            startActivity(PhoneActivity.newIntent(requireActivity(), s))
+    private fun toShopProfile(shop: ShopModel) {
+        ShopModelWrapper.shopModel = shop
+        startActivity(Intent(PhoneActivity.newIntent(requireActivity(), shop)))
+    }
+    inner class ShopAdapterF (private val list: List<ShopModel>) : RecyclerView.Adapter<ShopAdapterF.ShopView>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ShopView(LayoutInflater.from(parent.context).inflate(R.layout.shop_view, parent, false))
+
+        override fun getItemCount(): Int = list.size
+
+        override fun onBindViewHolder(holder: ShopView, position: Int) {
+            val shop = list[position]
+            holder.itemView.shop_txt.text = shop.text
+            Glide.with(holder.itemView.shop_img)
+                .load(shop.image)
+                .into(holder.itemView.shop_img)
+
+            holder.itemView.setOnClickListener {
+                toShopProfile(shop)
+            }
         }
-
-        rv_shop.adapter = ShopAdapter(listHolder, lb)
-        rv_shop.layoutManager = GridLayoutManager(activity, 2)
+        inner class ShopView(view: View) : RecyclerView.ViewHolder(view)
     }
-
-//    override fun clickItem(shopModel: ShopModel) {
-//        startActivity(PhoneActivity.newIntent(requireActivity(), shopModel))
-//    }
 }
-//
-//interface IClickItemModel {
-//    fun clickItem(shopModel: ShopModel)
-//}
+
+
+
