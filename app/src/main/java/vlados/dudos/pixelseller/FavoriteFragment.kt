@@ -10,11 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_phone.view.*
-import kotlinx.android.synthetic.main.shop_view.view.*
-import vlados.dudos.pixelseller.Case.listF
+import kotlinx.android.synthetic.main.favorite_fragment.*
 
-class ShopFragment : Fragment() {
-
+class FavoriteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,9 +22,20 @@ class ShopFragment : Fragment() {
         val asd = inflater.inflate(R.layout.favorite_fragment, container, false)
         val rv2 = asd.findViewById(R.id.rv) as RecyclerView
 
+        val list = Case.listF.toMutableList()
+        val listNew = mutableListOf<ShopModel>()
+
+        Case.sharedPreferences.value?.let {
+            for (shopModel in list) {
+                val name = "fav${shopModel.id}"
+                val result = it.getBoolean(name, false)
+                if (result)
+                    listNew.add(shopModel)
+            }
+        }
 
         rv2.layoutManager = GridLayoutManager(activity, 2)
-        rv2.adapter = ShopAdapterF(listF)
+        rv2.adapter = ShopAdapter(listNew)
         return asd
     }
 
@@ -35,25 +44,32 @@ class ShopFragment : Fragment() {
         ShopModelWrapper.shopModel = shop
         startActivity(Intent(PhoneActivity.newIntent(requireActivity(), shop)))
     }
-    inner class ShopAdapterF (private val list: List<ShopModel>) : RecyclerView.Adapter<ShopAdapterF.ShopView>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ShopView(LayoutInflater.from(parent.context).inflate(R.layout.shop_view, parent, false))
+
+    inner class ShopAdapter(private val list: List<ShopModel>) :
+        RecyclerView.Adapter<ShopAdapter.ShopView>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            ShopView(LayoutInflater.from(parent.context).inflate(R.layout.shop_view, parent, false))
 
         override fun getItemCount(): Int = list.size
 
         override fun onBindViewHolder(holder: ShopView, position: Int) {
             val shop = list[position]
-            holder.itemView.shop_txt.text = shop.text
-            Glide.with(holder.itemView.shop_img)
+            holder.itemView.description.text = shop.text
+            Glide.with(holder.itemView.img)
                 .load(shop.image)
-                .into(holder.itemView.shop_img)
+                .into(holder.itemView.img)
 
             holder.itemView.setOnClickListener {
                 toShopProfile(shop)
             }
         }
+
         inner class ShopView(view: View) : RecyclerView.ViewHolder(view)
     }
 }
+
+
+
 
 
 

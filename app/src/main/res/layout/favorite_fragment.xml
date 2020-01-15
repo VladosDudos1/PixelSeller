@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/alternative_white">
+    android:background="@color/alternative_white"
+    android:orientation="vertical">
+
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -13,18 +14,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Товары"
+            android:text="Избранное"
             android:textColor="@color/white"
             android:textSize="22dp"
             android:layout_marginStart="24dp"/>
     </androidx.appcompat.widget.Toolbar>
 
 
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv"
-        android:layout_gravity="center"
-        android:padding="8dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/rv"
+        android:padding="8dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
