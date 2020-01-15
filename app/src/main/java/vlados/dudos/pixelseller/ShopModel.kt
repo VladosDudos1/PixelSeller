@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ShopModel(
+    val id: Int,
     val image: Int,
     val text: String,
     val description: String
-): Parcelable
+) : Parcelable
