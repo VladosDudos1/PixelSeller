@@ -19,7 +19,6 @@
             android:id="@+id/shop_img"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/pixel"
             android:background="@color/white"/>
 
         <TextView
@@ -28,7 +27,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@color/grey"
-            android:text="Pixel 4"
+            android:text="adsadsadsa"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

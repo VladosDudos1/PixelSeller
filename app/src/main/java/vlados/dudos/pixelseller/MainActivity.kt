@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.shop_fragment.*
+import kotlinx.android.synthetic.main.activity_main.*
+import vlados.dudos.pixelseller.Case.openFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,9 +19,6 @@ class MainActivity : AppCompatActivity() {
 
 
         showShopFragment()
-
-
-
 
         val bottomNavigation: BottomNavigationView = findViewById(R.id.navigation_bar)
 
@@ -36,21 +33,39 @@ class MainActivity : AppCompatActivity() {
                 R.id.settings -> {
                     showSettingsFragment()
                 }
+                R.id.heart_img -> {
+                    showFavoriteFragment()
+                }
+
             }
             true
         }
     }
 
+
     fun replaceFragment(fmt: Fragment) {
         manager.beginTransaction().replace(R.id.fragmet_holder, fmt).addToBackStack(null).commit()
     }
 
-    fun showShopFragment(){
-        replaceFragment(ShopFragment())
+    fun showShopFragment() {
+        if (openFragment != "ShopFragment opened") {
+            replaceFragment(ShopFragment())
+        }
+        openFragment = "ShopFragment opened"
     }
 
-    fun showSettingsFragment(){
-        replaceFragment(SettingsFragment())
+    fun showSettingsFragment() {
+        if (openFragment != "SettingsFragment opened") {
+            replaceFragment(SettingsFragment())
+        }
+        openFragment = "SettingsFragment opened"
+    }
+
+    fun showFavoriteFragment() {
+        if (openFragment != "FavoriteFragment opened") {
+            replaceFragment(FavoriteFragment())
+        }
+        openFragment = "FavoriteFragment opened"
     }
 
 }
